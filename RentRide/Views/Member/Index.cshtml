@@ -1,0 +1,44 @@
+﻿@model RentRide.Models.ViewModels.MemberDashboardViewModel
+@{
+    ViewData["Title"] = "Your dashboard";
+}
+<div class="dashboard-shell">
+    <div class="dashboard-layout">
+        <aside class="dashboard-sidebar">
+            <p class="sidebar-caption">Your account</p>
+            <nav aria-label="Member navigation">
+                <a class="sidebar-link active" asp-controller="Member" asp-action="Index"><span class="sidebar-icon">▦</span>Overview</a>
+                <a class="sidebar-link" href="#rental-activity"><span class="sidebar-icon">◷</span>Rental activity</a>
+                <a class="sidebar-link" href="#profile"><span class="sidebar-icon">♙</span>My profile</a>
+            </nav>
+            <div class="sidebar-profile"><strong>@Model.FullName</strong><span>RentRide member</span></div>
+        </aside>
+        <section class="dashboard-content">
+            <div class="dashboard-crumb">RentRide <span class="mx-1">/</span> My account</div>
+            <div class="dashboard-heading">
+                <div><h1>Welcome, @Model.FullName.Split(' ')[0].</h1><p>Your next great drive is waiting.</p></div>
+                <span class="role-pill">MEMBER</span>
+            </div>
+            <div class="welcome-panel">
+                <div><div class="eyebrow">A little more freedom</div><h2>Make a day of it.</h2><p>We’re getting the keys ready. Booking is coming soon.</p></div>
+                <span class="welcome-mark">R</span>
+            </div>
+            <div class="stat-grid mt-4">
+                <article class="stat-card"><span class="stat-label">Your rentals</span><strong class="stat-value">0</strong><span class="stat-note">Your first trip is still ahead</span></article>
+                <article class="stat-card"><span class="stat-label">Upcoming trips</span><strong class="stat-value">0</strong><span class="stat-note">No reservations yet</span></article>
+                <article class="stat-card"><span class="stat-label">Member since</span><strong class="stat-value" style="font-size:25px">@Model.MemberSince.ToString("MMM yyyy")</strong><span class="stat-note">Glad you’re here</span></article>
+            </div>
+            <section class="dashboard-panel" id="rental-activity">
+                <div class="panel-heading"><h2>Your rental activity</h2><span>Coming soon</span></div>
+                <div class="empty-state"><h3>Ready when you are.</h3><p>Your reservations and rental history will show up here once booking is available.</p></div>
+            </section>
+            <section class="dashboard-panel" id="profile">
+                <div class="panel-heading"><h2>Member profile</h2><span>Your account details</span></div>
+                <div class="profile-details">
+                    <div class="profile-detail"><span>Full name</span><strong>@Model.FullName</strong></div>
+                    <div class="profile-detail"><span>Email address</span><strong>@Model.Email</strong></div>
+                </div>
+            </section>
+        </section>
+    </div>
+</div>

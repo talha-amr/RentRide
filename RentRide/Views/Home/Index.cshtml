@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Premium car rental, made simple";
+}
+
+<section class="hero">
+    <div class="container hero-content">
+        <div class="eyebrow">The road, on your terms</div>
+        <h1>A better way<br />to <em>get there.</em></h1>
+        <p class="hero-copy">The right car makes every mile feel different. Find your next favorite drive with RentRide.</p>
+        <div class="hero-actions">
+            <a asp-controller="Account" asp-action="Signup" class="btn btn-brand">Find your ride <span aria-hidden="true">→</span></a>
+            <a href="#fleet" class="btn btn-hero-outline">Explore our fleet</a>
+        </div>
+        <div class="hero-note">Thoughtful service. Exceptional drives.</div>
+    </div>
+</section>
+
+<section class="section-pad" id="fleet">
+    <div class="container">
+        <div class="fleet-top">
+            <div class="section-heading">
+                <div class="eyebrow">A few favorites</div>
+                <h2>Find the feeling<br />you’re looking for.</h2>
+                <p>A considered collection for the everyday, the escape, and everything in between.</p>
+            </div>
+            <a asp-controller="Account" asp-action="Signup" class="text-link">See what’s possible <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <article class="car-card">
+                    <img class="car-image" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=950&q=80" alt="Modern red sports coupe" loading="lazy" />
+                    <div class="car-body"><div class="car-kicker">The weekend escape</div><h3 class="car-title">Chevrolet Corvette</h3><div class="car-meta"><span>Coupe · Automatic</span><span>From $89 / day</span></div></div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="car-card">
+                    <img class="car-image" src="https://images.unsplash.com/photo-1617469767053-d3b523a0b982?auto=format&fit=crop&w=950&q=80" alt="Luxury dark sedan" loading="lazy" />
+                    <div class="car-body"><div class="car-kicker">The everyday upgrade</div><h3 class="car-title">Mercedes-Benz E-Class</h3><div class="car-meta"><span>Sedan · Automatic</span><span>From $72 / day</span></div></div>
+                </article>
+            </div>
+            <div class="col-md-4">
+                <article class="car-card">
+                    <img class="car-image" src="https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=950&q=80" alt="Premium SUV on a scenic road" loading="lazy" />
+                    <div class="car-body"><div class="car-kicker">Room for the whole crew</div><h3 class="car-title">Range Rover Sport</h3><div class="car-meta"><span>SUV · Automatic</span><span>From $96 / day</span></div></div>
+                </article>
+            </div>
+        </div>
+        <p class="text-secondary small mt-3 mb-0">Featured vehicles are for inspiration only. Availability and booking features are coming soon.</p>
+    </div>
+</section>
+
+<section class="section-pad section-paper">
+    <div class="container">
+        <div class="section-heading">
+            <div class="eyebrow">The RentRide difference</div>
+            <h2>More than a set of keys.</h2>
+            <p>We believe renting a car should feel like the start of something good.</p>
+        </div>
+        <div class="benefit-grid">
+            <article class="benefit"><span class="benefit-number">01</span><h3>Cars worth the drive</h3><p>A carefully considered fleet, selected for comfort, character, and the details that make a trip.</p></article>
+            <article class="benefit"><span class="benefit-number">02</span><h3>People who care</h3><p>Real, thoughtful support from the first hello to the moment you arrive.</p></article>
+            <article class="benefit"><span class="benefit-number">03</span><h3>Freedom to go</h3><p>A straightforward experience that puts the focus where it belongs: on the journey.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section-pad" id="how-it-works">
+    <div class="container">
+        <div class="section-heading">
+            <div class="eyebrow">Three easy steps</div>
+            <h2>Made for the way<br />you want to move.</h2>
+        </div>
+        <div class="steps">
+            <article class="step"><h3>Find your fit</h3><p>Explore a lineup with something for every kind of plan.</p></article>
+            <article class="step"><h3>Make it yours</h3><p>Create your RentRide account and get ready for your next drive.</p></article>
+            <article class="step"><h3>Take the long way</h3><p>Booking tools are on the way. For now, enjoy a first look around.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container">
+        <div class="cta-band">
+            <div><h2>Your next drive starts here.</h2><p>Join RentRide and be first to hear what’s coming.</p></div>
+            <a asp-controller="Account" asp-action="Signup" class="btn btn-brand">Create your account <span aria-hidden="true">→</span></a>
+        </div>
+    </div>
+</section>

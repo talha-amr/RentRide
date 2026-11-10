@@ -1,0 +1,59 @@
+﻿@model RentRide.Models.ViewModels.AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin dashboard";
+}
+<div class="dashboard-shell">
+    <div class="dashboard-layout">
+        <aside class="dashboard-sidebar">
+            <p class="sidebar-caption">Workspace</p>
+            <nav aria-label="Admin navigation">
+                <a class="sidebar-link active" asp-controller="Admin" asp-action="Index"><span class="sidebar-icon">▦</span>Overview</a>
+                <a class="sidebar-link" href="#recent-users"><span class="sidebar-icon">♙</span>Users</a>
+                <a class="sidebar-link" href="#platform"><span class="sidebar-icon">⌁</span>Platform</a>
+            </nav>
+            <div class="sidebar-profile"><strong>@User.Identity?.Name</strong><span>Administrator</span></div>
+        </aside>
+        <section class="dashboard-content">
+            <div class="dashboard-crumb">RentRide <span class="mx-1">/</span> Admin</div>
+            <div class="dashboard-heading">
+                <div><h1>Good to see you, @User.Identity?.Name?.Split(' ')[0].</h1><p>Here’s what’s happening with RentRide today.</p></div>
+                <span class="role-pill admin">ADMINISTRATOR</span>
+            </div>
+            <div class="stat-grid">
+                <article class="stat-card"><span class="stat-label">Registered users</span><strong class="stat-value">@Model.TotalUsers</strong><span class="stat-note">All accounts in RentRide</span></article>
+                <article class="stat-card"><span class="stat-label">Members</span><strong class="stat-value">@Model.TotalMembers</strong><span class="stat-note">Active member accounts</span></article>
+                <article class="stat-card"><span class="stat-label">Bookings</span><strong class="stat-value">—</strong><span class="stat-note">Booking tools coming soon</span></article>
+            </div>
+            <section class="dashboard-panel" id="recent-users">
+                <div class="panel-heading"><h2>Recently joined</h2><span>Latest accounts</span></div>
+                @if (Model.RecentUsers.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table dashboard-table">
+                            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+                            <tbody>
+                                @foreach (var user in Model.RecentUsers)
+                                {
+                                    <tr>
+                                        <td class="fw-semibold">@user.FullName</td>
+                                        <td>@user.Email</td>
+                                        <td><span class="role-pill @(user.Role == "Admin" ? "admin" : "")">@user.Role</span></td>
+                                        <td>@user.CreatedAt.ToString("MMM d, yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state"><h3>No accounts yet</h3><p>New registrations will appear here.</p></div>
+                }
+            </section>
+            <section class="dashboard-panel" id="platform">
+                <div class="panel-heading"><h2>More for the road</h2><span>On the way</span></div>
+                <div class="empty-state"><h3>Your platform, at a glance.</h3><p>Fleet, reservations, and reporting tools will be available here in a future release.</p></div>
+            </section>
+        </section>
+    </div>
+</div>

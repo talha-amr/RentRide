@@ -1,0 +1,44 @@
+﻿@model RentRide.Models.ViewModels.SignupViewModel
+@{
+    ViewData["Title"] = "Create your account";
+}
+<div class="auth-shell">
+    <aside class="auth-visual auth-visual-signup">
+        <div class="auth-quote"><h2>Make room for a little more road.</h2><p>Come for the drive. Stay for the way it makes you feel.</p></div>
+    </aside>
+    <section class="auth-panel">
+        <div class="auth-form-wrap">
+            <div class="eyebrow">Welcome to RentRide</div>
+            <h1>Create your account</h1>
+            <p class="auth-subtitle">A better drive is just around the corner.</p>
+            <form asp-controller="Account" asp-action="Signup" method="post">
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label">Full name</label>
+                    <input asp-for="FullName" class="form-control" autocomplete="name" placeholder="Your full name" />
+                    <span asp-validation-for="FullName"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email address</label>
+                    <input asp-for="Email" class="form-control" autocomplete="email" placeholder="you@example.com" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" class="form-control" autocomplete="new-password" placeholder="At least 8 characters" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirm password</label>
+                    <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" placeholder="Enter your password again" />
+                    <span asp-validation-for="ConfirmPassword"></span>
+                </div>
+                <button type="submit" class="btn btn-brand w-100">Create account <span aria-hidden="true">→</span></button>
+            </form>
+            <p class="auth-switch">Already have an account? <a asp-action="Login">Log in</a></p>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
