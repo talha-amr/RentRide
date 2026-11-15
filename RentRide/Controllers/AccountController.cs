@@ -1,26 +1,21 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using RentRide.Models;
-using RentRide.Models.Repositories;
 using RentRide.Models.ViewModels;
 
 namespace RentRide.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public AccountController(
-            IUserRepository userRepository,
-            IPasswordHasher<User> passwordHasher)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
-            _userRepository = userRepository;
-            _passwordHasher = passwordHasher;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -38,66 +33,85 @@ namespace RentRide.Controllers
                 return View(model);
             }
 
-            var user = new User
+            var user = new ApplicationUser
             {
                 FullName = model.FullName.Trim(),
+                UserName = model.Email.Trim(),
                 Email = model.Email.Trim(),
                 Role = "Member"
             };
-            user.PasswordHash = _passwordHasher.HashPassword(user, model.Password);
 
-            try
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
             {
-                _userRepository.Create(user);
-            }
-            catch (SqlException exception) when (exception.Number is 2601 or 2627)
-            {
-                ModelState.AddModelError(nameof(model.Email), "An account with this email already exists.");
+                foreach (var error in result.Errors)
+                {
+                    var key = error.Code is "DuplicateEmail" or "DuplicateUserName"
+                        ? nameof(model.Email)
+                        : string.Empty;
+                    ModelState.AddModelError(key, error.Description);
+                }
+
                 return View(model);
             }
 
-            var createdUser = _userRepository.GetByEmail(user.Email);
-            if (createdUser is null)
-            {
-                throw new InvalidOperationException("The account was created but could not be loaded.");
-            }
-
-            await SignInUserAsync(createdUser);
+            await _signInManager.SignInAsync(user, isPersistent: false);
             return RedirectToAction("Index", "Member");
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string? returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var user = _userRepository.GetByEmail(model.Email.Trim());
-            if (user is null ||
-                _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password) == PasswordVerificationResult.Failed)
+            var result = await _signInManager.PasswordSignInAsync(
+                model.Email.Trim(),
+                model.Password,
+                isPersistent: model.RememberMe,
+                lockoutOnFailure: false);
+
+            if (!result.Succeeded)
             {
                 ModelState.AddModelError(string.Empty, "Invalid email or password.");
                 return View(model);
             }
 
-            await SignInUserAsync(user);
-            return RedirectToRoleHome(user.Role);
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            var user = await _userManager.FindByNameAsync(model.Email.Trim());
+            if (user is null)
+            {
+                throw new InvalidOperationException("The signed-in user could not be loaded.");
+            }
+
+            return user.Role switch
+            {
+                "Admin" => RedirectToAction("Index", "Admin"),
+                "Member" => RedirectToAction("Index", "Member"),
+                _ => Forbid()
+            };
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
@@ -105,34 +119,6 @@ namespace RentRide.Controllers
         public IActionResult AccessDenied()
         {
             return View();
-        }
-
-        private Task SignInUserAsync(User user)
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role)
-            };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            return HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal,
-                new AuthenticationProperties { IsPersistent = false });
-        }
-
-        private IActionResult RedirectToRoleHome(string role)
-        {
-            return role switch
-            {
-                "Admin" => RedirectToAction("Index", "Admin"),
-                "Member" => RedirectToAction("Index", "Member"),
-                _ => Forbid()
-            };
         }
     }
 }

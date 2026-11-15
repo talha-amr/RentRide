@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using RentRide.Models;
 using RentRide.Models.Repositories;
@@ -13,12 +12,29 @@ namespace RentRide
 
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+            builder.Services.AddScoped<UserRepository>();
+            builder.Services.AddScoped<IUserRepository>(services =>
+                services.GetRequiredService<UserRepository>());
+            builder.Services.AddScoped<IUserStore<ApplicationUser>>(services =>
+                services.GetRequiredService<UserRepository>());
 
             builder.Services
-                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
+                .AddIdentityCore<ApplicationUser>(options =>
+                {
+                    options.User.RequireUniqueEmail = true;
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
+                .AddSignInManager();
+
+            builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, RentRideClaimsPrincipalFactory>();
+
+            builder.Services
+                .AddAuthentication(IdentityConstants.ApplicationScheme)
+                .AddCookie(IdentityConstants.ApplicationScheme, options =>
                 {
                     options.LoginPath = "/Account/Login";
                     options.AccessDeniedPath = "/Account/AccessDenied";

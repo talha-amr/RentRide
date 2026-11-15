@@ -4,9 +4,15 @@
     {
         User? GetByEmail(string email);
 
+        User? GetByNormalizedEmail(string normalizedEmail);
+
         User? GetById(int userId);
 
-        void Create(User user);
+        int Create(User user);
+
+        bool Update(User user);
+
+        bool Delete(int userId);
 
         bool UpdateRole(int userId, string role);
 
