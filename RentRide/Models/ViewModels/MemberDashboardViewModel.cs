@@ -6,6 +6,8 @@ namespace RentRide.Models.ViewModels
 
         public string Email { get; set; } = string.Empty;
 
+        public string? PhoneNumber { get; set; }
+
         public DateTime MemberSince { get; set; }
     }
 }

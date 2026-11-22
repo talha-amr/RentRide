@@ -1,7 +1,7 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using RentRide.Models.Repositories;
+using RentRide.Data;
 using RentRide.Models.ViewModels;
 
 namespace RentRide.Controllers
@@ -9,22 +9,16 @@ namespace RentRide.Controllers
     [Authorize(Roles = "Member")]
     public class MemberController : Controller
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public MemberController(IUserRepository userRepository)
+        public MemberController(UserManager<ApplicationUser> userManager)
         {
-            _userRepository = userRepository;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userIdValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdValue, out int userId))
-            {
-                return Forbid();
-            }
-
-            var user = _userRepository.GetById(userId);
+            var user = await _userManager.GetUserAsync(User);
             if (user is null)
             {
                 return NotFound();
@@ -32,8 +26,9 @@ namespace RentRide.Controllers
 
             return View(new MemberDashboardViewModel
             {
-                FullName = user.FullName,
-                Email = user.Email,
+                FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.Email ?? user.UserName ?? string.Empty : user.FullName,
+                Email = user.Email ?? string.Empty,
+                PhoneNumber = user.PhoneNumber,
                 MemberSince = user.CreatedAt
             });
         }

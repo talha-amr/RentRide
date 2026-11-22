@@ -1,0 +1,30 @@
+@model RentRide.Models.Car
+
+@if (Model.Id != 0)
+{
+    <input asp-for="Id" type="hidden" />
+}
+<div class="mb-3">
+    <label asp-for="Make" class="form-label"></label>
+    <input asp-for="Make" class="form-control" />
+    <span asp-validation-for="Make" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Model" class="form-label"></label>
+    <input asp-for="Model" class="form-control" />
+    <span asp-validation-for="Model" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Year" class="form-label"></label>
+    <input asp-for="Year" class="form-control" />
+    <span asp-validation-for="Year" class="text-danger"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="DailyRate" class="form-label"></label>
+    <input asp-for="DailyRate" class="form-control" />
+    <span asp-validation-for="DailyRate" class="text-danger"></span>
+</div>
+<div class="form-check mb-3">
+    <input asp-for="IsAvailable" class="form-check-input" />
+    <label asp-for="IsAvailable" class="form-check-label"></label>
+</div>

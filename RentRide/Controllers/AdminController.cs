@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using RentRide.Models.Repositories;
+using Microsoft.EntityFrameworkCore;
+using RentRide.Data;
 using RentRide.Models.ViewModels;
 
 namespace RentRide.Controllers
@@ -8,23 +10,48 @@ namespace RentRide.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly IUserRepository _userRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AdminController(IUserRepository userRepository)
+        public AdminController(UserManager<ApplicationUser> userManager)
         {
-            _userRepository = userRepository;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = new AdminDashboardViewModel
             {
-                TotalUsers = _userRepository.GetUserCount(),
-                TotalMembers = _userRepository.GetMemberCount(),
-                RecentUsers = _userRepository.GetRecentUsers(6)
+                TotalUsers = await _userManager.Users.CountAsync(),
+                TotalMembers = (await _userManager.GetUsersInRoleAsync("Member")).Count
             };
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RecentUsers()
+        {
+            var users = await _userManager.Users
+                .OrderByDescending(user => user.CreatedAt)
+                .ThenByDescending(user => user.Id)
+                .Take(6)
+                .ToListAsync();
+            var recentUsers = new List<AdminRecentUserViewModel>(users.Count);
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                recentUsers.Add(new AdminRecentUserViewModel
+                {
+                    FullName = string.IsNullOrWhiteSpace(user.FullName) ? user.Email ?? user.UserName ?? string.Empty : user.FullName,
+                    Email = user.Email ?? string.Empty,
+                    PhoneNumber = user.PhoneNumber,
+                    Role = string.Join(", ", roles),
+                    CreatedAt = user.CreatedAt
+                });
+            }
+
+            return PartialView("_RecentUsers", recentUsers);
         }
     }
 }

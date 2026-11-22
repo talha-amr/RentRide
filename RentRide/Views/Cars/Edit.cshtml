@@ -1,0 +1,18 @@
+@model RentRide.Models.Car
+@{
+    ViewData["Title"] = "Edit car";
+}
+
+<div class="container py-5">
+    <h1>Edit car</h1>
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <partial name="_CarFields" model="Model" />
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

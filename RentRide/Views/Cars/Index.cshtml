@@ -1,0 +1,52 @@
+@model IReadOnlyList<RentRide.Models.Car>
+@{
+    ViewData["Title"] = "Manage cars";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1>Manage cars</h1>
+            <p class="text-muted mb-0">Add, update, and remove cars in the rental fleet.</p>
+        </div>
+        <a class="btn btn-primary" asp-action="Create">Add a car</a>
+    </div>
+
+    @if (TempData["StatusMessage"] is string statusMessage)
+    {
+        <div class="alert alert-success" role="status">@statusMessage</div>
+    }
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">No cars have been added yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr><th>Car</th><th>Year</th><th>Daily rate</th><th>Availability</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var car in Model)
+                    {
+                        <tr>
+                            <td>@car.Make @car.Model</td>
+                            <td>@car.Year</td>
+                            <td>@car.DailyRate.ToString("C")</td>
+                            <td>@(car.IsAvailable ? "Available" : "Unavailable")</td>
+                            <td class="text-nowrap">
+                                <a asp-action="Details" asp-route-id="@car.Id">Details</a> |
+                                <a asp-action="Edit" asp-route-id="@car.Id">Edit</a> |
+                                <a asp-action="Delete" asp-route-id="@car.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <a asp-controller="Admin" asp-action="Index">Back to admin dashboard</a>
+</div>

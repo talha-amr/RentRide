@@ -1,0 +1,59 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="auth-shell">
+    <section class="auth-visual auth-visual-login">
+        <div class="auth-quote">
+            <span class="eyebrow">WELCOME BACK</span>
+            <h2>Your next drive starts here.</h2>
+            <p>Sign in to pick up where your RentRide journey left off.</p>
+        </div>
+    </section>
+    <section class="auth-panel">
+        <div class="auth-form-wrap">
+            <span class="eyebrow">RENT WITH CONFIDENCE</span>
+            <h1>Log in</h1>
+            <p class="auth-subtitle">Use your RentRide account to continue.</p>
+            <form id="account" method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Your password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-check mb-3">
+                    <input asp-for="Input.RememberMe" class="form-check-input" />
+                    <label asp-for="Input.RememberMe" class="form-check-label">@Html.DisplayNameFor(m => m.Input.RememberMe)</label>
+                </div>
+                <button id="login-submit" type="submit" class="w-100 btn btn-brand">Log in</button>
+            </form>
+            <p class="auth-switch"><a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a></p>
+            <p class="auth-switch">New to RentRide? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Create an account</a></p>
+            <p class="auth-switch"><a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend confirmation email</a></p>
+            @if (Model.ExternalLogins?.Count > 0)
+            {
+                <hr />
+                <p class="auth-subtitle">Or sign in with</p>
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <button type="submit" class="btn btn-outline-dark me-2" name="provider" value="@provider.Name">@provider.DisplayName</button>
+                    }
+                </form>
+            }
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

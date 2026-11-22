@@ -1,0 +1,41 @@
+@{
+    var dashboardController = User.IsInRole("Admin") ? "Admin" : "Member";
+    var dashboardRole = User.IsInRole("Admin") ? "Administrator" : "Member";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RentRide</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="dashboard-topbar">
+        <div class="dashboard-topbar-inner">
+            <a class="brand-lockup dashboard-brand" asp-controller="@dashboardController" asp-action="Index" aria-label="RentRide dashboard">
+                <span class="brand-mark">R</span>
+                <span>rent<span class="brand-accent">ride</span><small>MOVE WITH CONFIDENCE</small></span>
+            </a>
+            <div class="dashboard-account">
+                <a class="dashboard-account-link" asp-controller="@dashboardController" asp-action="Index">
+                    <span class="user-dot"></span>
+                    <span class="dashboard-account-details"><strong>@User.Identity?.Name</strong><small>@dashboardRole</small></span>
+                </a>
+                <a class="dashboard-home-link" asp-controller="Home" asp-action="Index">Visit site</a>
+                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home")" method="post">
+                    <button type="submit" class="btn btn-outline-dark btn-sm">Log out</button>
+                </form>
+            </div>
+        </div>
+    </header>
+    <main role="main">
+        @RenderBody()
+    </main>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

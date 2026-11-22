@@ -8,7 +8,7 @@
         <h1>A better way<br />to <em>get there.</em></h1>
         <p class="hero-copy">The right car makes every mile feel different. Find your next favorite drive with RentRide.</p>
         <div class="hero-actions">
-            <a asp-controller="Account" asp-action="Signup" class="btn btn-brand">Find your ride <span aria-hidden="true">→</span></a>
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-brand">Find your ride <span aria-hidden="true">→</span></a>
             <a href="#fleet" class="btn btn-hero-outline">Explore our fleet</a>
         </div>
         <div class="hero-note">Thoughtful service. Exceptional drives.</div>
@@ -23,7 +23,7 @@
                 <h2>Find the feeling<br />you’re looking for.</h2>
                 <p>A considered collection for the everyday, the escape, and everything in between.</p>
             </div>
-            <a asp-controller="Account" asp-action="Signup" class="text-link">See what’s possible <span aria-hidden="true">→</span></a>
+            <a asp-area="Identity" asp-page="/Account/Register" class="text-link">See what’s possible <span aria-hidden="true">→</span></a>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
@@ -82,7 +82,7 @@
     <div class="container">
         <div class="cta-band">
             <div><h2>Your next drive starts here.</h2><p>Join RentRide and be first to hear what’s coming.</p></div>
-            <a asp-controller="Account" asp-action="Signup" class="btn btn-brand">Create your account <span aria-hidden="true">→</span></a>
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-brand">Create your account <span aria-hidden="true">→</span></a>
         </div>
     </div>
 </section>

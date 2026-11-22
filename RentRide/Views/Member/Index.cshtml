@@ -28,6 +28,10 @@
                 <article class="stat-card"><span class="stat-label">Upcoming trips</span><strong class="stat-value">0</strong><span class="stat-note">No reservations yet</span></article>
                 <article class="stat-card"><span class="stat-label">Member since</span><strong class="stat-value" style="font-size:25px">@Model.MemberSince.ToString("MMM yyyy")</strong><span class="stat-note">Glad you’re here</span></article>
             </div>
+            <section class="dashboard-panel" id="available-cars">
+                <div class="panel-heading"><h2>Available cars</h2><span>Browse the fleet</span></div>
+                <div id="member-cars-content" aria-live="polite"><p>Loading available cars…</p></div>
+            </section>
             <section class="dashboard-panel" id="rental-activity">
                 <div class="panel-heading"><h2>Your rental activity</h2><span>Coming soon</span></div>
                 <div class="empty-state"><h3>Ready when you are.</h3><p>Your reservations and rental history will show up here once booking is available.</p></div>
@@ -37,6 +41,7 @@
                 <div class="profile-details">
                     <div class="profile-detail"><span>Full name</span><strong>@Model.FullName</strong></div>
                     <div class="profile-detail"><span>Email address</span><strong>@Model.Email</strong></div>
+                    <div class="profile-detail"><span>Phone number</span><strong>@(string.IsNullOrWhiteSpace(Model.PhoneNumber) ? "Not provided" : Model.PhoneNumber)</strong></div>
                 </div>
             </section>
         </section>

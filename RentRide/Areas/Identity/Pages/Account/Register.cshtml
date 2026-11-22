@@ -1,0 +1,67 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Create an account";
+}
+
+<div class="auth-shell">
+    <section class="auth-visual auth-visual-signup">
+        <div class="auth-quote">
+            <span class="eyebrow">THE ROAD, ON YOUR TERMS</span>
+            <h2>Find a little more freedom.</h2>
+            <p>Create your RentRide account and get ready for your next great drive.</p>
+        </div>
+    </section>
+    <section class="auth-panel">
+        <div class="auth-form-wrap">
+            <span class="eyebrow">START YOUR JOURNEY</span>
+            <h1>Create an account</h1>
+            <p class="auth-subtitle">Join RentRide in just a few steps.</p>
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="mb-3">
+                    <label asp-for="Input.FullName" class="form-label">Full name</label>
+                    <input asp-for="Input.FullName" class="form-control" autocomplete="name" aria-required="true" placeholder="Your full name" />
+                    <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.PhoneNumber" class="form-label">Phone number <span class="text-muted">(optional)</span></label>
+                    <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="tel" placeholder="Your phone number" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Create a password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Input.ConfirmPassword" class="form-label">Confirm password</label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Enter your password again" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-brand">Create account</button>
+            </form>
+            <p class="auth-switch">Already have an account? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Log in</a></p>
+            @if (Model.ExternalLogins?.Count > 0)
+            {
+                <hr />
+                <p class="auth-subtitle">Or create an account with</p>
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <button type="submit" class="btn btn-outline-dark me-2" name="provider" value="@provider.Name">@provider.DisplayName</button>
+                    }
+                </form>
+            }
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,16 @@
+@model RentRide.Models.Car
+@{
+    ViewData["Title"] = "Car details";
+}
+
+<div class="container py-5">
+    <h1>@Model.Year @Model.Make @Model.Model</h1>
+    <dl class="row mt-4">
+        <dt class="col-sm-3">Daily rate</dt>
+        <dd class="col-sm-9">@Model.DailyRate.ToString("C")</dd>
+        <dt class="col-sm-3">Availability</dt>
+        <dd class="col-sm-9">@(Model.IsAvailable ? "Available" : "Unavailable")</dd>
+    </dl>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to cars</a>
+</div>

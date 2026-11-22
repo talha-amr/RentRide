@@ -8,6 +8,7 @@
             <p class="sidebar-caption">Workspace</p>
             <nav aria-label="Admin navigation">
                 <a class="sidebar-link active" asp-controller="Admin" asp-action="Index"><span class="sidebar-icon">▦</span>Overview</a>
+                <a class="sidebar-link" asp-controller="Cars" asp-action="Index"><span class="sidebar-icon">🚗</span>Manage cars</a>
                 <a class="sidebar-link" href="#recent-users"><span class="sidebar-icon">♙</span>Users</a>
                 <a class="sidebar-link" href="#platform"><span class="sidebar-icon">⌁</span>Platform</a>
             </nav>
@@ -24,31 +25,15 @@
                 <article class="stat-card"><span class="stat-label">Members</span><strong class="stat-value">@Model.TotalMembers</strong><span class="stat-note">Active member accounts</span></article>
                 <article class="stat-card"><span class="stat-label">Bookings</span><strong class="stat-value">—</strong><span class="stat-note">Booking tools coming soon</span></article>
             </div>
+            <section class="dashboard-panel" id="available-cars">
+                <div class="panel-heading"><h2>Available cars</h2><a asp-controller="Cars" asp-action="Index">Manage fleet</a></div>
+                <div id="admin-cars-content" aria-live="polite"><p>Loading available cars…</p></div>
+            </section>
             <section class="dashboard-panel" id="recent-users">
                 <div class="panel-heading"><h2>Recently joined</h2><span>Latest accounts</span></div>
-                @if (Model.RecentUsers.Count > 0)
-                {
-                    <div class="table-responsive">
-                        <table class="table dashboard-table">
-                            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
-                            <tbody>
-                                @foreach (var user in Model.RecentUsers)
-                                {
-                                    <tr>
-                                        <td class="fw-semibold">@user.FullName</td>
-                                        <td>@user.Email</td>
-                                        <td><span class="role-pill @(user.Role == "Admin" ? "admin" : "")">@user.Role</span></td>
-                                        <td>@user.CreatedAt.ToString("MMM d, yyyy")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <div class="empty-state"><h3>No accounts yet</h3><p>New registrations will appear here.</p></div>
-                }
+                <div id="recent-users-content" aria-live="polite">
+                    <p>Loading recent accounts…</p>
+                </div>
             </section>
             <section class="dashboard-panel" id="platform">
                 <div class="panel-heading"><h2>More for the road</h2><span>On the way</span></div>

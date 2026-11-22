@@ -1,0 +1,15 @@
+@model RentRide.Models.Car
+@{
+    ViewData["Title"] = "Delete car";
+}
+
+<div class="container py-5">
+    <h1>Delete car</h1>
+    <p>Are you sure you want to delete <strong>@Model.Year @Model.Make @Model.Model</strong>?</p>
+    <p>Daily rate: @Model.DailyRate.ToString("C")</p>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <input asp-for="Id" type="hidden" />
+        <button type="submit" class="btn btn-danger">Delete car</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+</div>
